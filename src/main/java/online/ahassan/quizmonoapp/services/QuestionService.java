@@ -4,9 +4,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.ahassan.quizmonoapp.dto.QuestionDto;
-import online.ahassan.quizmonoapp.dto.QuestionOptionsDto;
+import online.ahassan.quizmonoapp.dto.QuestionOptionDto;
 import online.ahassan.quizmonoapp.entities.Question;
 import online.ahassan.quizmonoapp.entities.QuestionOptions;
+import online.ahassan.quizmonoapp.repositories.QuestionOptionsRepository;
 import online.ahassan.quizmonoapp.repositories.QuestionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final QuestionOptionsRepository questionOptionRepository;
 
     public Page<QuestionDto> getAllQuestions(Map<String, String> requestFilters, Pageable pageable) {
         log.debug("Fetching questions with filters: {} and pageable: {}", requestFilters, pageable);
@@ -130,7 +132,7 @@ public class QuestionService {
                     .collect(Collectors.toMap(QuestionOptions::getId, o -> o));
 
             List<QuestionOptions> updatedOptions = new ArrayList<>();
-            for (QuestionOptionsDto optionDto : updatedDto.getOptions()) {
+            for (QuestionOptionDto optionDto : updatedDto.getOptions()) {
                 if (optionDto.getId() != null && existingOptionsMap.containsKey(optionDto.getId())) {
                     log.debug("Updating existing option id={}", optionDto.getId());
                     QuestionOptions existingOption = existingOptionsMap.get(optionDto.getId());
@@ -178,5 +180,9 @@ public class QuestionService {
 
     public Page<QuestionDto> findByQuizId(Integer quizId, Pageable pageable) {
         return questionRepository.findByQuizId(quizId, pageable).map(QuestionDto::fromEntity);
+    }
+
+    public Optional<QuestionOptions> findByQuestionIdAndOptionId(Integer questionId, Integer optionId) {
+        return questionOptionRepository.findByQuestion_IdAndId(questionId, optionId);
     }
 }

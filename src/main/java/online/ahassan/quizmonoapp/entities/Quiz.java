@@ -17,7 +17,6 @@ public class Quiz {
     private Integer id;
 
     private String title;
-
     private String category;
 
     @ManyToMany

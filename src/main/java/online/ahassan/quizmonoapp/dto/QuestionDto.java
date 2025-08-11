@@ -12,7 +12,7 @@ import java.util.List;
 public class QuestionDto implements Serializable {
     private Integer id;
     private String questionTitle;
-    private List<QuestionOptionsDto> options = new ArrayList<>();
+    private List<QuestionOptionDto> options = new ArrayList<>();
     private String difficultyLevel;
     private String category;
 
@@ -20,7 +20,7 @@ public class QuestionDto implements Serializable {
         QuestionDto questionDto = new QuestionDto();
         questionDto.setId(question.getId());
         questionDto.setQuestionTitle(question.getQuestionTitle());
-        questionDto.setOptions(question.getOptions().stream().map(QuestionOptionsDto::fromEntity).toList());
+        questionDto.setOptions(question.getOptions().stream().map(QuestionOptionDto::fromEntity).toList());
         questionDto.setDifficultyLevel(question.getDifficultyLevel());
         questionDto.setCategory(question.getCategory());
         return questionDto;
@@ -35,7 +35,7 @@ public class QuestionDto implements Serializable {
 
         // Convert options and set the question reference
         List<QuestionOptions> questionOptions = options.stream()
-                .map(QuestionOptionsDto::toEntity)
+                .map(QuestionOptionDto::toEntity)
                 .peek(option -> option.setQuestion(question))
                 .toList();
         question.setOptions(questionOptions);

@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.ahassan.quizmonoapp.dto.QuestionDto;
 import online.ahassan.quizmonoapp.dto.QuizDto;
+import online.ahassan.quizmonoapp.dto.QuizResponse;
+import online.ahassan.quizmonoapp.dto.SubmissionQuestionDto;
 import online.ahassan.quizmonoapp.services.QuizService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/quiz")
@@ -56,6 +60,21 @@ public class QuizController {
             return ResponseEntity.ok(savedQuiz);
         } catch (Exception e) {
             log.error("Error adding quiz", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/{id}/submit")
+    public ResponseEntity<QuizResponse> submitQuiz(@PathVariable Integer id, @RequestBody List<SubmissionQuestionDto> submissionQuestions) {
+        try {
+            QuizResponse quizResponse = quizService.calculateResult(id, submissionQuestions);
+            log.info("Quiz submitted successfully");
+            return ResponseEntity.ok(quizResponse);
+        } catch (IllegalArgumentException e) {
+            log.error("Error submitting quiz", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            log.error("Error submitting quiz", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

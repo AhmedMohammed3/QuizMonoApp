@@ -15,7 +15,7 @@ public class QuestionOptions {
     private Integer id;
 
     private String option;
-    private boolean rightAnswer;
+    private Boolean rightAnswer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
