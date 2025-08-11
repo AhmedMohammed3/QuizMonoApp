@@ -15,10 +15,15 @@ public class QuestionOptionsDto implements Serializable {
     private Boolean rightAnswer;
 
 
-    public static QuestionOptionsDto fromEntity(QuestionOptions questionOptions) {
+    public static QuestionOptionsDto fromEntityMetadata(QuestionOptions questionOptions) {
         QuestionOptionsDto questionOptionsDto = new QuestionOptionsDto();
         questionOptionsDto.setId(questionOptions.getId());
         questionOptionsDto.setOption(questionOptions.getOption());
+        return questionOptionsDto;
+    }
+
+    public static QuestionOptionsDto fromEntity(QuestionOptions questionOptions) {
+        QuestionOptionsDto questionOptionsDto = fromEntityMetadata(questionOptions);
         questionOptionsDto.setRightAnswer(questionOptions.isRightAnswer());
         return questionOptionsDto;
     }

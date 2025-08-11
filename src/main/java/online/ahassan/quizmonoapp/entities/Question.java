@@ -23,4 +23,8 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionOptions> options = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "quiz_questions", joinColumns = @JoinColumn(name = "questions_id"), inverseJoinColumns = @JoinColumn(name = "quiz_id"))
+    private List<Quiz> quiz;
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -164,5 +165,18 @@ public class QuestionService {
         questionRepository.deleteById(id);
         log.debug("Question with id={} deleted successfully", id);
         return "Question deleted successfully";
+    }
+
+    public List<QuestionDto> findRandomQuestionsByCategory(String category, Integer numOfQuestions) {
+        log.info("Fetching {} random questions for category='{}'", numOfQuestions, category);
+        List<Question> retrievedQuestions = questionRepository.findRandomQuestionsByCategory(category, numOfQuestions);
+        log.debug("{} random questions for category='{}' fetched successfully", numOfQuestions, category);
+        return retrievedQuestions.stream()
+                .map(QuestionDto::fromEntity)
+                .toList();
+    }
+
+    public Page<QuestionDto> findByQuizId(Integer quizId, Pageable pageable) {
+        return questionRepository.findByQuizId(quizId, pageable).map(QuestionDto::fromEntity);
     }
 }
