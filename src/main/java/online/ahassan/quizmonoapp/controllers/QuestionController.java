@@ -22,10 +22,7 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
-    public ResponseEntity<Page<QuestionDto>> getAllQuestions(
-            @RequestParam Map<String, String> requestFilters,
-            Pageable pageable
-    ) {
+    public ResponseEntity<Page<QuestionDto>> getAllQuestions(@RequestParam Map<String, String> requestFilters, Pageable pageable) {
         Map<String, String> caseInsensitiveFilters = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         caseInsensitiveFilters.putAll(requestFilters);
 
