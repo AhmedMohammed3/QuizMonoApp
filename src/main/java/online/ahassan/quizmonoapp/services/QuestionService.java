@@ -59,10 +59,10 @@ public class QuestionService {
         return result.map(QuestionDto::fromEntity);
     }
 
-    public String addQuestion(QuestionDto questionDto) {
+    public QuestionDto addQuestion(QuestionDto questionDto) {
         log.info("Adding new question: {}", questionDto.getQuestionTitle());
-        questionRepository.save(questionDto.toEntity());
-        return "Question added successfully";
+        Question createdQuestion = questionRepository.save(questionDto.toEntity());
+        return QuestionDto.fromEntity(createdQuestion);
     }
 
     /**

@@ -38,14 +38,14 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addQuestion(@RequestBody QuestionDto questionDto) {
+    public ResponseEntity<QuestionDto> addQuestion(@RequestBody QuestionDto questionDto) {
         try {
-            String message = questionService.addQuestion(questionDto);
-            log.info("Question added successfully: {}", message);
-            return ResponseEntity.ok(message);
+            QuestionDto createdQuestion = questionService.addQuestion(questionDto);
+            log.info("Question added successfully: {}", createdQuestion.getQuestionTitle());
+            return ResponseEntity.ok(createdQuestion);
         } catch (Exception e) {
             log.error("Error adding question", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add question");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
