@@ -128,6 +128,7 @@ public class QuestionService {
         return "Question updated successfully";
     }
 
+    @Transactional
     public String deleteQuestion(Integer id) {
         if (!questionRepository.existsById(id)) {
             throw new RuntimeException("Question not found with id " + id);
