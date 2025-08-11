@@ -53,15 +53,16 @@ public class QuestionController {
      * PUT - Full update (replace entire resource)
      */
     @PutMapping("/{id}")
-    public ResponseEntity<String> replaceQuestion(@PathVariable Integer id, @RequestBody QuestionDto questionDto) {
+    public ResponseEntity<QuestionDto> replaceQuestion(@PathVariable Integer id, @RequestBody QuestionDto questionDto) {
         try {
-            String message = questionService.replaceQuestion(id, questionDto);
-            return ResponseEntity.ok(message);
+            QuestionDto updatedQuestion = questionService.replaceQuestion(id, questionDto);
+            return ResponseEntity.ok(updatedQuestion);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            log.error("Error replacing question", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             log.error("Error replacing question", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to replace question");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -69,15 +70,16 @@ public class QuestionController {
      * PATCH - Partial update
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateQuestion(@PathVariable Integer id, @RequestBody QuestionDto questionDto) {
+    public ResponseEntity<QuestionDto> updateQuestion(@PathVariable Integer id, @RequestBody QuestionDto questionDto) {
         try {
-            String message = questionService.updateQuestion(id, questionDto);
-            return ResponseEntity.ok(message);
+            QuestionDto updatedQuestion = questionService.updateQuestion(id, questionDto);
+            return ResponseEntity.ok(updatedQuestion);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            log.error("Error updating question", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             log.error("Error updating question", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update question");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
